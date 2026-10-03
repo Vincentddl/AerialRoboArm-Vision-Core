@@ -1,0 +1,70 @@
+{
+  "model_file": "foam_center_v9_generalization_bg01_20260816_candidate.pt",
+  "sha256": "a516fd248772f80c3f07669782df84197bc9348d979a41975f200fc18a86d2da",
+  "status": "candidate_not_deployed",
+  "architecture": "YOLO11s-seg",
+  "initialized_from": "models/foam_center_v9_seg.pt",
+  "active_runtime_model_unchanged": "models/foam_center_v9_seg.pt",
+  "training": {
+    "date": "2026-08-16",
+    "device": "CUDA:0 NVIDIA GeForce RTX 4070 Laptop GPU",
+    "epochs": 30,
+    "image_size": 640,
+    "batch": 8,
+    "output": "outputs/training/foam_center_v9_generalization_bg01_20260816",
+    "dataset_train": {
+      "positive": 704,
+      "negative": 207
+    },
+    "dataset_validation_unchanged": {
+      "positive": 76,
+      "negative": 79
+    }
+  },
+  "new_recording": {
+    "video": "data/raw/foam_generalization/foam_generalization_gripper_bg01_20260816_003846_002381.mkv",
+    "duration_seconds": 449.52,
+    "resolution": "640x480",
+    "fps": 50,
+    "positive_samples_added": 157,
+    "hard_negative_samples_added": 10,
+    "manual_rejections": 3,
+    "staging_manifest": "data/training/foam_center_v9_additions/generalization_gripper_bg01_20260816_retry/final_selected/manifest.json"
+  },
+  "independent_validation": {
+    "confidence_0.30": {
+      "positive_recall": 1.0,
+      "negative_false_positives": 3,
+      "center_error_mean_px": 2.5103,
+      "center_error_p95_px": 10.0344,
+      "arm_plane_angle_error_mean_deg": 0.1824,
+      "arm_plane_angle_error_p95_deg": 0.6089
+    },
+    "confidence_0.45": {
+      "positive_recall": 1.0,
+      "negative_false_positives": 2
+    },
+    "confidence_0.50": {
+      "positive_recall": 1.0,
+      "negative_false_positives": 1
+    }
+  },
+  "operational_audit_on_training_scene": {
+    "warning": "This recording contributed training samples, so these rates are not independent generalization evidence.",
+    "confidence_0.50": {
+      "still_center": 1.0,
+      "slow_all_areas": 0.952381,
+      "distance_far_mid_near": 0.891892,
+      "edge_entry_exit": 0.963636,
+      "fast_crossing": 0.96875,
+      "fast_approach_stop": 1.0,
+      "small_tilt": 0.884615,
+      "partial_occlusion": 0.928571,
+      "hard_negative_false_positive_frame_rate": 0.010204
+    }
+  },
+  "recommendation": {
+    "predeployment_confidence": 0.50,
+    "next_gate": "Record one unseen background/light session and compare against the active V9 before runtime promotion."
+  }
+}

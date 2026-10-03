@@ -1,0 +1,81 @@
+{
+  "type": "servo_optical_angle_lut",
+  "name": "red_marker_servo_camera_lut_20260815_after_slip_v3",
+  "version": 3,
+  "definitions": {
+    "servo_command_deg": "Absolute servo g command angle. The LUT maps the commanded angle, not the ideal driven-gear angle.",
+    "optical_offset_deg": "Signed camera-ray angle of the calibrated gripper-centre marker in the arm motion plane; camera optical axis is zero and image-down is positive.",
+    "inferred_servo_angle_deg": "The g-equivalent command angle inferred by inverting this lookup table; this is not direct HX8 encoder telemetry."
+  },
+  "runtime_anchor": {
+    "detector": "HSV red-circle detector for calibration and validation; V9 foam segmentation for marker-free automatic operation",
+    "point": "calibrated gripper-centre ray",
+    "requirement": "The red marker represented the gripper centre only while measuring this table. Remove it for normal operation, detect the external target centre, convert that pixel to optical_offset_deg, and invert this table to obtain the servo g command."
+  },
+  "mechanical_transmission": {
+    "servo_pinion_teeth": 40,
+    "driven_gear_teeth": 48,
+    "driven_delta_per_servo_delta": -0.8333333333333334,
+    "included_in_empirical_fit": true,
+    "note": "Do not apply the 40:48 gear ratio again at runtime."
+  },
+  "model": {
+    "kind": "piecewise_linear_lut",
+    "interpolation": "linear",
+    "inverse_interpolation": "linear",
+    "points": [
+      {"servo_command_deg": -100.0, "optical_offset_deg": -14.699800, "sample_count": 1},
+      {"servo_command_deg": -95.0, "optical_offset_deg": -12.348650, "sample_count": 2},
+      {"servo_command_deg": -90.0, "optical_offset_deg": -9.243900, "sample_count": 2},
+      {"servo_command_deg": -85.0, "optical_offset_deg": -6.113700, "sample_count": 2},
+      {"servo_command_deg": -80.0, "optical_offset_deg": -2.778650, "sample_count": 2},
+      {"servo_command_deg": -75.0, "optical_offset_deg": 0.473800, "sample_count": 2},
+      {"servo_command_deg": -70.0, "optical_offset_deg": 3.851550, "sample_count": 2},
+      {"servo_command_deg": -65.0, "optical_offset_deg": 7.341600, "sample_count": 2},
+      {"servo_command_deg": -60.0, "optical_offset_deg": 10.857650, "sample_count": 2},
+      {"servo_command_deg": -55.0, "optical_offset_deg": 14.462500, "sample_count": 2},
+      {"servo_command_deg": -50.0, "optical_offset_deg": 18.096100, "sample_count": 2},
+      {"servo_command_deg": -45.0, "optical_offset_deg": 21.798100, "sample_count": 2}
+    ]
+  },
+  "valid_range": {
+    "servo_command_deg": [-100.0, -45.0],
+    "optical_offset_deg": [-14.699800, 21.798100]
+  },
+  "boundary_tolerance_deg": 0.5,
+  "fit": {
+    "method": "Per-command median red-marker bearing with 20 edge frames trimmed, averaged across outbound and return holds; the -100 degree turnaround has one hold.",
+    "independent_midpoint_validation": {
+      "servo_commands_deg": [-47, -52, -57, -62, -67, -72, -77, -82, -87, -92, -97],
+      "directions": 2,
+      "optical_offset_mae_deg": 0.151172,
+      "optical_offset_rmse_deg": 0.173271,
+      "optical_offset_max_error_deg": 0.379570,
+      "inverse_servo_mae_deg": 0.223180,
+      "inverse_servo_rmse_deg": 0.253712,
+      "inverse_servo_max_error_deg": 0.539768,
+      "roundtrip_optical_mae_deg": 0.100410,
+      "roundtrip_optical_max_error_deg": 0.199400,
+      "hold_detection_rate_mean_percent": 99.8697,
+      "hold_detection_rate_min_percent": 98.1651
+    },
+    "absolute_accuracy_note": "Validation measures the repeatability and interpolation accuracy of the camera/servo system. It is not an externally traceable protractor measurement of the driven link's absolute mechanical angle."
+  },
+  "source": {
+    "camera_calibration": "configs/camera_2p1mm_640x480_fisheye.json",
+    "calibration_recording": "data/raw/servo_red_encoder_validation_after_slip_20260815_session1/servo_red_encoder_validation_20260815_212715_624998.mkv",
+    "calibration_angle_events": "data/raw/servo_red_encoder_validation_after_slip_20260815_session1/servo_red_encoder_validation_20260815_212715_624998.angles.jsonl",
+    "calibration_rtt_telemetry": "data/raw/servo_red_encoder_validation_after_slip_20260815_session1/servo_red_encoder_validation_20260815_212715_624998.rtt.jsonl",
+    "calibration_analysis": "outputs/servo_red_encoder_validation_20260815_session1_summary.json",
+    "validation_recording": "data/raw/servo_optical_relation_validation_20260815_session2/servo_optical_relation_validation_integer_20260815_20260815_215259_041425.mkv",
+    "validation_angle_events": "data/raw/servo_optical_relation_validation_20260815_session2/servo_optical_relation_validation_integer_20260815_20260815_215259_041425.angles.jsonl",
+    "validation_rtt_telemetry": "data/raw/servo_optical_relation_validation_20260815_session2/servo_optical_relation_validation_integer_20260815_20260815_215259_041425.rtt.jsonl",
+    "validation_frame_analysis": "outputs/servo_optical_relation_validation_20260815_session2_frames.jsonl",
+    "trimmed_hold_edge_frames": 20,
+    "excluded_servo_angles_deg": [-40.0, -35.0],
+    "exclusion_reason": "After the mechanical slip, the marker was outside the useful image region at -40 and -35 degrees. V3 is intentionally limited to the fully observed -100 to -45 degree range.",
+    "previous_config": "configs/servo_to_optical_angle_red_marker_lut_20260813_v2.json",
+    "backup_config": "configs/servo_to_optical_angle_red_marker_lut_20260813_v2.json",
+    "recalibration_reason": "The mechanism slipped after an unintended motion into its physical limit, changing the servo-command to optical-bearing relation."
+  }
+}

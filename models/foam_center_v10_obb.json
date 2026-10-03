@@ -1,0 +1,48 @@
+{
+  "name": "foam_center_v10_obb",
+  "status": "trained_candidate_not_deployed",
+  "task": "oriented_bounding_box_detection",
+  "architecture": "YOLO11s-obb",
+  "created_at": "2026-08-07",
+  "weights": "foam_center_v10_obb.pt",
+  "sha256": "EE79F420E919028073DC09D36218BC6ED3E64CA0E189CE648B4626EF2A5AA4E8",
+  "input_size": [640, 480],
+  "class_names": ["foam_board"],
+  "center_definition": "center of the predicted oriented bounding box",
+  "training": {
+    "source_dataset": "data/training/foam_center_v9",
+    "derived_dataset": "data/training/foam_center_v10_obb",
+    "label_conversion": "minimum-area rectangle fitted to each reviewed V9 visible-foam contour",
+    "planned_epochs": 60,
+    "completed_epochs": 28,
+    "early_stopping_patience": 12,
+    "best_epoch": 16,
+    "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+    "framework": "Ultralytics 8.4.33 / PyTorch 2.6.0+cu118"
+  },
+  "validation": {
+    "images": 155,
+    "positive_images": 76,
+    "negative_images": 79,
+    "precision": 0.99851,
+    "recall": 1.0,
+    "map50": 0.995,
+    "map50_95": 0.88425,
+    "runtime_confidence_checks": [0.2, 0.25, 0.3, 0.35, 0.4, 0.5],
+    "negative_false_positives_at_conf_0_30": 0,
+    "center_error_px_at_conf_0_30": {
+      "mean": 6.0423,
+      "median": 3.6835,
+      "p95": 26.1839,
+      "max": 36.3285
+    },
+    "arm_plane_angle_absolute_error_deg_at_conf_0_30": {
+      "mean": 0.4346,
+      "median": 0.3122,
+      "p95": 1.4951,
+      "max": 2.4891
+    },
+    "reference_note": "Ground truth is the center of a minimum-area rectangle fitted to the reviewed visible-foam contour; not external metrology."
+  },
+  "deployment_note": "Candidate only. run_realtime.py remains on V9 segmentation until OBB runtime support and live replay are explicitly approved."
+}

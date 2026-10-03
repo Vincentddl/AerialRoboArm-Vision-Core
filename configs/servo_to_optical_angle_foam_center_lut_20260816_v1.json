@@ -1,0 +1,191 @@
+{
+  "type": "servo_optical_angle_lut",
+  "name": "foam_center_servo_camera_lut_20260816_v1",
+  "version": 1,
+  "created_at": "2026-08-16T22:29:48+08:00",
+  "status": "independently_validated_deployed_runtime",
+  "definitions": {
+    "servo_command_deg": "Nominal MCU g target used during calibration.",
+    "encoder_position_median_deg": "Median synchronized HX8 encoder pos during the stable hold; retained as validation metadata.",
+    "optical_offset_deg": "Signed fisheye-corrected camera-ray angle of the marker-free segmented foam geometric centre in the arm motion plane; optical axis is zero and image-down is positive.",
+    "inferred_servo_angle_deg": "The g-equivalent target command inferred by inverse interpolation of this marker-free foam-centre lookup table."
+  },
+  "runtime_anchor": {
+    "detector": "foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt",
+    "point": "marker-free visible-foam segmentation centroid with the runtime contour/box hybrid rule",
+    "warning": "This table uses the foam geometric centre, not the old red gripper-centre marker. Do not mix the two anchor definitions."
+  },
+  "mechanical_transmission": {
+    "servo_pinion_teeth": 40,
+    "driven_gear_teeth": 48,
+    "included_in_empirical_fit": true,
+    "note": "Do not apply the 40:48 ratio again at runtime."
+  },
+  "model": {
+    "kind": "piecewise_linear_lut",
+    "interpolation": "linear",
+    "inverse_interpolation": "linear",
+    "points": [
+      {
+        "servo_command_deg": -97.0,
+        "optical_offset_deg": -18.97285,
+        "encoder_position_median_deg": -96.4,
+        "hold_count": 1,
+        "sampled_frame_count": 11,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": null
+      },
+      {
+        "servo_command_deg": -92.0,
+        "optical_offset_deg": -16.314155,
+        "encoder_position_median_deg": -91.55,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.13933
+      },
+      {
+        "servo_command_deg": -87.0,
+        "optical_offset_deg": -13.45567,
+        "encoder_position_median_deg": -86.55,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.12526
+      },
+      {
+        "servo_command_deg": -82.0,
+        "optical_offset_deg": -10.3788,
+        "encoder_position_median_deg": -81.525,
+        "hold_count": 2,
+        "sampled_frame_count": 21,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.22754
+      },
+      {
+        "servo_command_deg": -77.0,
+        "optical_offset_deg": -6.9654,
+        "encoder_position_median_deg": -76.5,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.00662
+      },
+      {
+        "servo_command_deg": -72.0,
+        "optical_offset_deg": -3.846465,
+        "encoder_position_median_deg": -71.5,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.03467
+      },
+      {
+        "servo_command_deg": -67.0,
+        "optical_offset_deg": -0.496805,
+        "encoder_position_median_deg": -66.525,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.04781
+      },
+      {
+        "servo_command_deg": -62.0,
+        "optical_offset_deg": 2.97241,
+        "encoder_position_median_deg": -61.5,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.01108
+      },
+      {
+        "servo_command_deg": -57.0,
+        "optical_offset_deg": 6.423245,
+        "encoder_position_median_deg": -56.65,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.02377
+      },
+      {
+        "servo_command_deg": -52.0,
+        "optical_offset_deg": 10.018205,
+        "encoder_position_median_deg": -51.65,
+        "hold_count": 2,
+        "sampled_frame_count": 20,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.14419
+      },
+      {
+        "servo_command_deg": -47.0,
+        "optical_offset_deg": 13.3646,
+        "encoder_position_median_deg": -46.8,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detection_rate": 1.0,
+        "direction_optical_repeat_difference_deg": 0.34768
+      }
+    ]
+  },
+  "valid_range": {
+    "servo_command_deg": [
+      -97.0,
+      -47.0
+    ],
+    "optical_offset_deg": [
+      -18.97285,
+      13.3646
+    ]
+  },
+  "boundary_tolerance_deg": 2.0,
+  "fit": {
+    "method": "Per-command median of stable marker-free foam-centre holds; outbound and return medians combined; -97 degree turnaround has one hold.",
+    "node_count": 11,
+    "calibration_detection_rate": 1.0,
+    "encoder_command_absolute_error_deg": {
+      "mean": 0.440909,
+      "max": 0.6
+    },
+    "direction_optical_repeat_difference_deg": {
+      "mean": 0.110795,
+      "max": 0.34768
+    },
+    "absolute_accuracy_note": "This is an operational camera/encoder correspondence calibration, not externally traceable protractor metrology."
+  },
+  "source": {
+    "calibration_report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\evaluation\\no_red_servo_relation_calibration_session1_20260816.json",
+    "calibration_video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_no_red_servo_relation_validation_20260816\\foam_no_red_servo_relation_validation_20260816_213950_950044.mkv",
+    "calibration_angle_events": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_no_red_servo_relation_validation_20260816\\foam_no_red_servo_relation_validation_20260816_213950_950044.angles.jsonl",
+    "calibration_rtt_telemetry": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_no_red_servo_relation_validation_20260816\\foam_no_red_servo_relation_validation_20260816_213950_950044.rtt.jsonl",
+    "camera_calibration": "D:\\Study_data\\AerialRoboArm-Vision-Core\\configs\\camera_2p1mm_640x480_fisheye.json",
+    "old_reference_only": "D:\\Study_data\\AerialRoboArm-Vision-Core\\configs\\servo_to_optical_angle_red_marker_lut_20260815_v3.json",
+    "data_split_policy": "Only session1 was used to construct nodes. Session2 is reserved exclusively for independent validation."
+  },
+  "independent_validation": {
+    "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\evaluation\\no_red_servo_relation_v1_independent_validation_20260816.json",
+    "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_no_red_servo_relation_validation_session2_20260816\\foam_no_red_servo_relation_validation_independent_20260816_221106_443784.mkv",
+    "used_for_fit": false,
+    "completed_holds": 21,
+    "sampled_frames": 230,
+    "detection_rate": 1.0,
+    "calibration_range_coverage": 1.0,
+    "absolute_encoder_angle_error_deg": {
+      "mean": 0.8484,
+      "median": 0.814,
+      "rmse": 0.8701,
+      "p95": 1.1983,
+      "max": 1.5144
+    },
+    "direction_repeat_difference_deg": {
+      "mean": 0.339,
+      "p95": 0.5579,
+      "max": 0.5672
+    },
+    "acceptance": {
+      "absolute_error_limit_deg": 10.0,
+      "detection_rate_min": 0.95,
+      "direction_repeat_mean_limit_deg": 1.0,
+      "overall_pass": true
+    }
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "model": "fisheye",
+  "image_size": [
+    640,
+    480
+  ],
+  "checkerboard_inner_corners": [
+    9,
+    6
+  ],
+  "square_size": 20.0,
+  "square_size_unit": "mm",
+  "valid_image_count": 53,
+  "rms": 0.2286372364165907,
+  "reprojection_error_px": 0.22863723641659073,
+  "per_image_reprojection_error_px": [
+    {
+      "image": "images_2p1mm_final\\frame_0024.png",
+      "error_px": 0.3606930132339427
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0050.png",
+      "error_px": 0.3344979470159826
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0049.png",
+      "error_px": 0.2991800138382652
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0008.png",
+      "error_px": 0.2862281523348305
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0011.png",
+      "error_px": 0.28373822851647296
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0073.png",
+      "error_px": 0.28236614206778593
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0021.png",
+      "error_px": 0.27792539821328205
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0052.png",
+      "error_px": 0.2778887577519456
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0009.png",
+      "error_px": 0.27689347663129404
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0003.png",
+      "error_px": 0.2668895319751111
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0102.png",
+      "error_px": 0.26423228605371635
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0046.png",
+      "error_px": 0.2554457449673505
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0013.png",
+      "error_px": 0.2553494328635302
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0109.png",
+      "error_px": 0.24215957512406236
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0084.png",
+      "error_px": 0.24015259986032775
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0051.png",
+      "error_px": 0.2376573003398378
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0107.png",
+      "error_px": 0.2362438446813877
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0012.png",
+      "error_px": 0.23321442164589007
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0110.png",
+      "error_px": 0.23271080598735144
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0020.png",
+      "error_px": 0.23174052973560116
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0054.png",
+      "error_px": 0.23119542195713652
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0105.png",
+      "error_px": 0.22940963873279374
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0043.png",
+      "error_px": 0.22718538208966196
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0022.png",
+      "error_px": 0.22662604548822485
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0108.png",
+      "error_px": 0.22344044667708646
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0070.png",
+      "error_px": 0.22232206748274197
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0018.png",
+      "error_px": 0.2185731588771683
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0047.png",
+      "error_px": 0.21828092229949914
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0033.png",
+      "error_px": 0.21665010708064258
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0103.png",
+      "error_px": 0.21592457294350476
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0106.png",
+      "error_px": 0.2153920435445761
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0005.png",
+      "error_px": 0.21533784137934078
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0075.png",
+      "error_px": 0.21437978497787857
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0104.png",
+      "error_px": 0.21398276014272102
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0014.png",
+      "error_px": 0.2128492038234621
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0015.png",
+      "error_px": 0.21090769116664682
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0007.png",
+      "error_px": 0.21049459187586267
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0068.png",
+      "error_px": 0.20157337787566382
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0061.png",
+      "error_px": 0.19840946963231032
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0097.png",
+      "error_px": 0.19231404115112047
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0099.png",
+      "error_px": 0.18776635946759881
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0079.png",
+      "error_px": 0.18307919289995853
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0025.png",
+      "error_px": 0.18223582350222636
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0100.png",
+      "error_px": 0.18160609168061373
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0101.png",
+      "error_px": 0.17943620386384118
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0029.png",
+      "error_px": 0.17217078819937065
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0040.png",
+      "error_px": 0.1712805288024064
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0087.png",
+      "error_px": 0.17115684157080524
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0098.png",
+      "error_px": 0.1631008820650974
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0078.png",
+      "error_px": 0.15559184952923916
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0006.png",
+      "error_px": 0.15412041931072223
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0067.png",
+      "error_px": 0.14801514511848873
+    },
+    {
+      "image": "images_2p1mm_final\\frame_0017.png",
+      "error_px": 0.1361426299951584
+    }
+  ],
+  "camera_matrix": [
+    [
+      419.35543795764244,
+      0.0,
+      321.37366844786635
+    ],
+    [
+      0.0,
+      581.8530503089627,
+      240.19121575973708
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "dist_coeffs": [
+    -0.15882602655660463,
+    0.056523751957302325,
+    -0.11768612922954828,
+    0.09008958083243508
+  ],
+  "notes": [
+    "Use the same resolution during runtime.",
+    "Recalibrate if camera position, lens, focus, or capture resolution changes.",
+    "For grab angle, undistort the detected target center before computing angle."
+  ]
+}

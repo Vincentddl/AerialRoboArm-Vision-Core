@@ -1,0 +1,72 @@
+{
+  "type": "servo_optical_angle_linear",
+  "name": "foam_block_yolo_v8_anchor_20260804",
+  "version": 1,
+  "definitions": {
+    "servo_command_deg": "The labelled g command used during capture.",
+    "optical_offset_deg": "Signed angle from the camera optical axis to the YOLO V8 bounding-box centre ray in the single-axis camera plane; positive is downward in the image.",
+    "legacy_mechanical_horizontal_deg": "optical_offset_deg plus the configured camera mounting tilt; retained as a separate legacy field."
+  },
+  "mechanical_transmission": {
+    "servo_pinion_teeth": 40,
+    "driven_gear_teeth": 48,
+    "driven_delta_per_servo_delta": -0.8333333333333334,
+    "assumption": "40-tooth servo pinion externally meshes with the 48-tooth driven gear; rotation direction is reversed.",
+    "included_in_empirical_fit": true,
+    "note": "Do not multiply this ratio into the empirical optical-angle equation again. Absolute driven-gear angle still requires a mechanical zero reference."
+  },
+  "runtime_anchor": {
+    "detector": "models/foam_board_2p1mm_v8.pt",
+    "point": "bounding_box_center",
+    "reason": "The real-time program computes angles from the YOLO bounding-box centre, so its empirical fit must use the same anchor."
+  },
+  "model": {
+    "kind": "linear",
+    "equation": "optical_offset_deg = slope * servo_command_deg + intercept_deg",
+    "slope": 0.6683202979339288,
+    "intercept_deg": 44.40582747283626,
+    "inverse_equation": "servo_command_deg = (optical_offset_deg - intercept_deg) / slope"
+  },
+  "valid_range": {
+    "servo_command_deg": [
+      -95.0,
+      -45.0
+    ],
+    "optical_offset_deg": [
+      -19.0846,
+      14.3314
+    ]
+  },
+  "boundary_tolerance_deg": 0.75,
+  "fit": {
+    "sample_count": 10,
+    "r_squared": 0.9992754967114347,
+    "rmse_deg": 0.2846749519791454,
+    "max_residual_deg": 0.41356121038252525,
+    "note": "Fit residual measures consistency of the YOLO V8 anchor within this recording; it is not an absolute real-world angle accuracy claim."
+  },
+  "source": {
+    "video": "data/raw/servo_angle_20260804/arm_motion_slow_50fps_20260804_222641_587720.mkv",
+    "angle_events": "data/raw/servo_angle_20260804/arm_motion_slow_50fps_20260804_222641_587720.angles.jsonl",
+    "camera_calibration": "configs/camera_2p1mm_640x480_fisheye.json",
+    "used_servo_commands_deg": [
+      -45,
+      -50,
+      -60,
+      -65,
+      -70,
+      -75,
+      -80,
+      -85,
+      -90,
+      -95
+    ],
+    "excluded": {
+      "-30": "foam block clipped by the bottom image boundary",
+      "-35": "foam block clipped by the bottom image boundary",
+      "-40": "foam block touches the bottom image boundary",
+      "-55": "YOLO V8 produced no usable target box in the representative hold frame",
+      "-100": "foam block is outside the image"
+    }
+  }
+}

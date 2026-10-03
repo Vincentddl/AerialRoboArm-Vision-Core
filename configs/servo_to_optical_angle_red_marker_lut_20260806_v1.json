@@ -1,0 +1,64 @@
+{
+  "type": "servo_optical_angle_lut",
+  "name": "red_marker_servo_camera_lut_20260806",
+  "version": 1,
+  "definitions": {
+    "servo_command_deg": "The labelled absolute servo g angle used during capture.",
+    "optical_offset_deg": "Signed camera-ray angle of the red marker centre in the arm motion plane; positive is downward in the image.",
+    "inferred_servo_angle_deg": "The g-equivalent servo angle inferred from the red marker image through the inverse lookup table; this is not direct encoder telemetry."
+  },
+  "runtime_anchor": {
+    "detector": "HSV red-circle detector",
+    "point": "red_marker_center",
+    "requirement": "The marker centre represents the calibrated gripper centre ray. It may be removed in automatic mode: detect the external target centre with YOLO and invert this table to command the gripper onto the same ray. Keep the marker only when visually inferring the current servo angle with run_servo_angle_monitor.py."
+  },
+  "mechanical_transmission": {
+    "servo_pinion_teeth": 40,
+    "driven_gear_teeth": 48,
+    "driven_delta_per_servo_delta": -0.8333333333333334,
+    "included_in_empirical_fit": true,
+    "note": "Do not multiply the gear ratio into this empirical lookup again."
+  },
+  "model": {
+    "kind": "piecewise_linear_lut",
+    "interpolation": "linear",
+    "inverse_interpolation": "linear",
+    "points": [
+      {"servo_command_deg": -100.0, "optical_offset_deg": -17.124638880, "sample_count": 2},
+      {"servo_command_deg": -95.0, "optical_offset_deg": -15.628172888, "sample_count": 4},
+      {"servo_command_deg": -90.0, "optical_offset_deg": -12.877625328, "sample_count": 4},
+      {"servo_command_deg": -85.0, "optical_offset_deg": -9.916714869, "sample_count": 4},
+      {"servo_command_deg": -80.0, "optical_offset_deg": -6.670783118, "sample_count": 4},
+      {"servo_command_deg": -75.0, "optical_offset_deg": -3.617064406, "sample_count": 4},
+      {"servo_command_deg": -70.0, "optical_offset_deg": -0.388298764, "sample_count": 4},
+      {"servo_command_deg": -65.0, "optical_offset_deg": 2.740718259, "sample_count": 4},
+      {"servo_command_deg": -60.0, "optical_offset_deg": 6.100380937, "sample_count": 4},
+      {"servo_command_deg": -55.0, "optical_offset_deg": 9.430249714, "sample_count": 4},
+      {"servo_command_deg": -50.0, "optical_offset_deg": 12.828200712, "sample_count": 4},
+      {"servo_command_deg": -45.0, "optical_offset_deg": 16.269137486, "sample_count": 4},
+      {"servo_command_deg": -40.0, "optical_offset_deg": 19.738457916, "sample_count": 4},
+      {"servo_command_deg": -35.0, "optical_offset_deg": 22.931828669, "sample_count": 4}
+    ]
+  },
+  "valid_range": {
+    "servo_command_deg": [-100.0, -35.0],
+    "optical_offset_deg": [-17.124638880, 22.931828669]
+  },
+  "boundary_tolerance_deg": 0.5,
+  "fit": {
+    "method": "Mean red-marker bearing at each 5-degree node across two independent recordings and both directions when available.",
+    "independent_session_mae_deg": 0.1111,
+    "independent_session_rmse_deg": 0.1160,
+    "independent_session_max_error_deg": 0.1528,
+    "absolute_accuracy_note": "These values measure camera-derived repeatability, not externally traceable absolute angle accuracy."
+  },
+  "source": {
+    "camera_calibration": "configs/camera_2p1mm_640x480_fisheye.json",
+    "recordings": [
+      "data/raw/servo_accuracy_large_marker_20260805/servo_accuracy_large_marker_50fps_20260805_231940_382239.mkv",
+      "data/raw/servo_accuracy_large_marker_repeat2_20260805/servo_accuracy_large_marker_repeat2_50fps_20260805_233051_861487.mkv"
+    ],
+    "excluded_servo_angle_deg": -30.0,
+    "exclusion_reason": "The red marker is outside the lower image boundary at g=-30 degrees."
+  }
+}

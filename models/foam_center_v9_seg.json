@@ -1,0 +1,43 @@
+{
+  "name": "foam_center_v9_seg",
+  "task": "instance_segmentation",
+  "architecture": "YOLO11s-seg",
+  "created_at": "2026-08-07",
+  "weights": "foam_center_v9_seg.pt",
+  "sha256": "EAD54F6F05AF3329C729F58EF4F7A21881C5EA91DB7125699A578047181C3288",
+  "input_size": [
+    640,
+    480
+  ],
+  "class_names": [
+    "foam_board"
+  ],
+  "recommended_confidence": 0.3,
+  "center_definition": {
+    "normal_box_area_fraction": [
+      0.01,
+      0.13
+    ],
+    "normal": "visible_mask_area_centroid",
+    "outside_normal_range": "bounding_box_center"
+  },
+  "validation": {
+    "positive_images": 76,
+    "negative_images": 79,
+    "positive_recall": 1.0,
+    "negative_false_positives": 2,
+    "center_error_px": {
+      "mean": 2.6904,
+      "median": 1.2425,
+      "p95": 10.7571,
+      "max": 21.1361
+    },
+    "arm_plane_angle_absolute_error_deg": {
+      "mean": 0.1961,
+      "median": 0.105,
+      "p95": 0.729,
+      "max": 1.641
+    },
+    "reference_note": "Reviewed GrabCut-refined visible-foam contour centroid; not external metrology."
+  }
+}

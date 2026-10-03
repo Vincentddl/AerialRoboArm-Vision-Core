@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.venv-*/
+runs/
+outputs/
+backups/
+
+# Large, reproducible or locally recorded assets.
+data/
+
+# Keep the selected runtime model out of ordinary Git history.
+models/*.pt
+/*.pt

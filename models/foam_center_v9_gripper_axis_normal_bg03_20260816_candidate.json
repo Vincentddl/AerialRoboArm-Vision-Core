@@ -1,0 +1,54 @@
+{
+  "model": "foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt",
+  "sha256": "04595F4F5D92AFC5EC219D1A7A3E20D2B1A8A6AD7D01230813A954D019B7A8C3",
+  "status": "deployed_with_marker_free_v1_runtime",
+  "purpose": "Segment the marker-free foam target and provide its visible-contour center for optical-axis and servo-angle inference.",
+  "initial_weights": "foam_center_v9_generalization_bg01_20260816_candidate.pt",
+  "training": {
+    "dataset": "data/training/foam_center_v9",
+    "train_images": 1079,
+    "validation_images": 155,
+    "new_reviewed_positive_images": 133,
+    "new_reviewed_negative_images": 35,
+    "manually_rejected_wrong_masks": 2,
+    "source": "data/raw/foam_generalization_holdout/foam_generalization_holdout_gripper_axis_hard_bg03_20260816_160157_438278.mkv",
+    "source_condition": "normal light, target mounted on the single-axis gripper",
+    "excluded_weak_light_source": "data/raw/foam_generalization_holdout/foam_generalization_holdout_gripper_axis_lighting_free_bg05_20260816_174815_576955.mkv",
+    "epochs_requested": 25,
+    "early_stopping": true
+  },
+  "independent_segmentation_validation_at_confidence_0p30": {
+    "positive_detected": "76/76",
+    "negative_false_positives": "2/79",
+    "center_error_px_mean": 2.39,
+    "center_error_px_p95": 11.37,
+    "optical_angle_error_deg_mean": 0.17,
+    "optical_angle_error_deg_p95": 0.63,
+    "optical_angle_error_deg_max": 1.17
+  },
+  "untouched_guided_video_validation_at_confidence_0p50": {
+    "source": "data/raw/foam_generalization_holdout/foam_generalization_holdout_gripper_axis_dim_bg04_20260816_173024_592754.mkv",
+    "environment": "normal light with uneven illumination; excluded from training",
+    "positive_detection_rate": "369/455 (81.1%)",
+    "hard_negative_false_positive_rate": "9/96 (9.4%)"
+  },
+  "servo_relation_validation": {
+    "lookup_table": "configs/servo_to_optical_angle_red_marker_lut_20260815_v3.json",
+    "valid_servo_command_range_deg": [-100.0, -45.0],
+    "valid_optical_offset_range_deg": [-14.6998, 21.7981],
+    "center_localization_equivalent_servo_error_deg": {
+      "samples_inside_v3_range": 55,
+      "mean": 0.24,
+      "median": 0.14,
+      "p95": 0.99,
+      "max": 1.76
+    },
+    "v3_lut_independent_inverse_error_deg": {
+      "mean": 0.22318,
+      "rmse": 0.253712,
+      "max": 0.539768
+    },
+    "note": "The detector error and LUT error are reported separately. The LUT already includes the empirical 40:48 transmission; do not apply the gear ratio again."
+  },
+  "runtime_policy": "Selected by run_realtime.py with the independently validated marker-free foam-centre V1 lookup table. HC-13 transmission remains operator-gated by the A key."
+}
