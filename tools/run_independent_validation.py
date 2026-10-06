@@ -16,7 +16,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 ANGLES = list(range(-29, -75, -5)) + list(range(-69, -28, 5))
-DEFAULT_CANDIDATE = ROOT / "configs/servo_to_optical_angle_foam_center_lut_20261006_restricted_v1.json"
+DEFAULT_CANDIDATE = ROOT / "configs/servo_to_optical_angle_foam_center_lut_20261006_merged_v1.json"
 MODEL = ROOT / "models/foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt"
 
 
@@ -117,9 +117,15 @@ def audit(video: Path, candidate: dict) -> dict:
             or not all(decoded) or not all(t["frame_index"] == i for i, t in enumerate(timestamps))):
         raise RuntimeError("Video decode or frame/timestamp integrity check failed.")
     video_hash = sha256(video)
-    training_video = Path(candidate.get("source", {}).get("video", ""))
-    if training_video.is_file() and video_hash == sha256(training_video):
-        raise RuntimeError("Validation video is identical to the training video.")
+    sources = candidate.get("source", {})
+    training_recordings = sources.get("training_recordings", [sources])
+    for training in training_recordings:
+        training_video = Path(training.get("video", ""))
+        training_hash = training.get("video_sha256")
+        if not training_hash and training_video.is_file():
+            training_hash = sha256(training_video)
+        if video_hash == training_hash:
+            raise RuntimeError("Validation video is identical to one of the training recordings.")
     return {"holds": len(ANGLES), "frames": frames, "video_sha256": video_hash, "material_pass": True}
 
 
@@ -165,7 +171,8 @@ def main() -> int:
     subprocess.run([sys.executable, str(ROOT / "tools/evaluate_no_red_servo_relation.py"),
                     "--video", str(video), "--events", str(video.with_suffix(".angles.jsonl")),
                     "--rtt", str(video.with_suffix(".rtt.jsonl")), "--model", str(MODEL),
-                    "--servo-calibration", str(frozen), "--device", "cpu", "--output", str(report_path)], check=True, cwd=ROOT)
+                    "--servo-calibration", str(frozen), "--reject-clipped-targets",
+                    "--device", "cpu", "--output", str(report_path)], check=True, cwd=ROOT)
     report = json.loads(report_path.read_text(encoding="utf-8"))
     passed = report["acceptance"]["overall_pass"] and report["inside_calibration_range_rate"] >= 0.95
     report["workflow_acceptance"] = {"material_pass": True, "range_coverage_min": 0.95,

@@ -47,6 +47,8 @@ def parse_args():
         / "servo_to_optical_angle_red_marker_lut_20260815_v3.json",
     )
     parser.add_argument("--confidence", type=float, default=0.50)
+    parser.add_argument("--reject-clipped-targets", action="store_true",
+                        help="Reject target boxes touching the image border (new merged-fit protocol)")
     parser.add_argument("--device", default="0")
     parser.add_argument("--sample-fps", type=float, default=5.0)
     parser.add_argument("--trim-start-seconds", type=float, default=0.8)
@@ -81,12 +83,16 @@ def summarize(values):
     }
 
 
-def predicted_centroid(result):
+def predicted_centroid(result, reject_clipped=False):
     if not len(result.boxes):
         return None, None, "none"
     best = int(result.boxes.conf.argmax().cpu())
     confidence = float(result.boxes.conf[best].cpu())
     box = result.boxes.xyxy[best].cpu().numpy()
+    if reject_clipped and (box[0] <= 2 or box[1] <= 2
+                           or box[2] >= result.orig_shape[1] - 2
+                           or box[3] >= result.orig_shape[0] - 2):
+        return None, confidence, "clipped_target"
     box_center = np.asarray([(box[0] + box[2]) / 2, (box[1] + box[3]) / 2])
     box_area_fraction = float((box[2] - box[0]) * (box[3] - box[1])) / float(
         result.orig_shape[0] * result.orig_shape[1]
@@ -181,7 +187,7 @@ def main():
             verbose=False,
         )
         for (hold_index, frame_index, _), result in zip(batch, results):
-            center, confidence, mode = predicted_centroid(result)
+            center, confidence, mode = predicted_centroid(result, args.reject_clipped_targets)
             item = {
                 "frame_index": frame_index,
                 "confidence": round(float(confidence), 6) if confidence is not None else None,
@@ -358,6 +364,7 @@ def main():
         "camera_calibration": str(args.camera_calibration.resolve()),
         "servo_calibration": str(args.servo_calibration.resolve()),
         "confidence_threshold": args.confidence,
+        "reject_clipped_targets": args.reject_clipped_targets,
         "source_fps": source_fps,
         "completed_holds": len(holds),
         "total_sampled_frames": total_sampled,

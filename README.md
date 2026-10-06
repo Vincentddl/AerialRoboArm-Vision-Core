@@ -7,6 +7,8 @@
 
 ## 当前推荐配置
 
+三段 2026-10-06 录像已合并重新拟合，新的命令角候选表为 `configs/servo_to_optical_angle_foam_center_lut_20261006_merged_v1.json`。筛选后使用 53 个保持段、576 帧完整目标，仍存在跨录像方向相关偏差；训练帧对编码器的 MAE 为 0.90°、P95 为 3.17°，尚未验收。`start_independent_validation.bat` 已切到这张表，等待第四段新录像测试；`start_restricted_vision_preview.bat` 只预览新表，不发送 HC-13。三段旧录像不再作为独立测试。
+
 2026-10-06 新装夹的候选视觉范围为 `-77°～-27°`，配置文件是 `configs/servo_to_optical_angle_foam_center_lut_20261006_restricted_v1.json`。严格端点复算的范围覆盖率为 90.35%、P95 角误差为 2.20°，尚未通过验收。双击 `start_restricted_vision_preview.bat` 可查看此候选角度，HC-13 输出关闭；普通 `run_realtime.py` 仍加载下面的历史运行表，不适用于新装夹的自动控制。独立验证入口改为范围内的 `-29°→-74°→-29°` 19 档，端点仍需单独核对。
 
 - 目标模型：`models/foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt`
