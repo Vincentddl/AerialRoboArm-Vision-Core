@@ -7,6 +7,8 @@
 
 ## 当前推荐配置
 
+2026-10-06 新装夹的候选视觉范围为 `-77°～-27°`，配置文件是 `configs/servo_to_optical_angle_foam_center_lut_20261006_restricted_v1.json`。严格端点复算的范围覆盖率为 90.35%、P95 角误差为 2.20°，尚未通过验收。双击 `start_restricted_vision_preview.bat` 可查看此候选角度，HC-13 输出关闭；普通 `run_realtime.py` 仍加载下面的历史运行表，不适用于新装夹的自动控制。独立验证入口改为范围内的 `-29°→-74°→-29°` 19 档，端点仍需单独核对。
+
 - 目标模型：`models/foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt`
 - 旧版基线：`models/foam_center_v9_seg.pt`、`models/foam_board_2p1mm_v8.pt`（保留，不覆盖）
 - 相机标定：`configs/camera_2p1mm_640x480_fisheye.json`

@@ -1,0 +1,203 @@
+{
+  "type": "servo_optical_angle_lut",
+  "name": "foam_center_servo_camera_lut_20261006_restricted_v1",
+  "version": 1,
+  "created_at": "2026-10-06T21:49:44+08:00",
+  "status": "preview_only_restricted_range_validation_failed",
+  "definitions": {
+    "servo_command_deg": "Nominal MCU g target used during the stable hold.",
+    "encoder_position_median_deg": "Median synchronized HX8 encoder position during the stable hold.",
+    "optical_offset_deg": "Signed fisheye-corrected camera-ray angle of the visible foam centre in the arm motion plane; image-down positive."
+  },
+  "runtime_anchor": {
+    "detector": "foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt",
+    "point": "marker-free visible-foam segmentation centre with the current runtime hybrid rule"
+  },
+  "model": {
+    "kind": "piecewise_linear_lut",
+    "interpolation": "linear",
+    "inverse_interpolation": "linear",
+    "points": [
+      {
+        "servo_command_deg": -77.0,
+        "optical_offset_deg": -20.472331999999998,
+        "source": "interpolated from frozen training nodes; independent footage not used for fitting"
+      },
+      {
+        "servo_command_deg": -75.0,
+        "optical_offset_deg": -19.9489,
+        "encoder_position_median_deg": -74.05,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.69398,
+        "voltage_median_mv": 12053.0
+      },
+      {
+        "servo_command_deg": -70.0,
+        "optical_offset_deg": -17.116495,
+        "encoder_position_median_deg": -69.1,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.19855,
+        "voltage_median_mv": 12058.0
+      },
+      {
+        "servo_command_deg": -65.0,
+        "optical_offset_deg": -13.39271,
+        "encoder_position_median_deg": -64.25,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.07318,
+        "voltage_median_mv": 12065.0
+      },
+      {
+        "servo_command_deg": -60.0,
+        "optical_offset_deg": -9.59666,
+        "encoder_position_median_deg": -59.25,
+        "hold_count": 2,
+        "sampled_frame_count": 21,
+        "detected_frame_count": 21,
+        "direction_optical_repeat_difference_deg": 0.13542,
+        "voltage_median_mv": 12062.5
+      },
+      {
+        "servo_command_deg": -55.0,
+        "optical_offset_deg": -5.810455,
+        "encoder_position_median_deg": -54.25,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.25567,
+        "voltage_median_mv": 12065.0
+      },
+      {
+        "servo_command_deg": -50.0,
+        "optical_offset_deg": -2.171955,
+        "encoder_position_median_deg": -49.3,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.01641,
+        "voltage_median_mv": 12067.5
+      },
+      {
+        "servo_command_deg": -45.0,
+        "optical_offset_deg": 1.749705,
+        "encoder_position_median_deg": -44.3,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.09199,
+        "voltage_median_mv": 12067.5
+      },
+      {
+        "servo_command_deg": -40.0,
+        "optical_offset_deg": 5.57771,
+        "encoder_position_median_deg": -39.35,
+        "hold_count": 2,
+        "sampled_frame_count": 21,
+        "detected_frame_count": 21,
+        "direction_optical_repeat_difference_deg": 0.0426,
+        "voltage_median_mv": 12067.5
+      },
+      {
+        "servo_command_deg": -35.0,
+        "optical_offset_deg": 9.076105,
+        "encoder_position_median_deg": -34.475,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.22981,
+        "voltage_median_mv": 12075.0
+      },
+      {
+        "servo_command_deg": -30.0,
+        "optical_offset_deg": 13.37684,
+        "encoder_position_median_deg": -29.5,
+        "hold_count": 2,
+        "sampled_frame_count": 22,
+        "detected_frame_count": 22,
+        "direction_optical_repeat_difference_deg": 0.14394,
+        "voltage_median_mv": 12075.0
+      },
+      {
+        "servo_command_deg": -27.0,
+        "optical_offset_deg": 15.204683000000001,
+        "source": "interpolated from frozen training nodes; independent footage not used for fitting"
+      }
+    ]
+  },
+  "valid_range": {
+    "servo_command_deg": [
+      -77.0,
+      -27.0
+    ],
+    "optical_offset_deg": [
+      -20.472331999999998,
+      15.204683000000001
+    ]
+  },
+  "boundary_tolerance_deg": 0.0,
+  "fit": {
+    "method": "Per-command median of 3-second stable outward and return holds; endpoint -80 has one hold.",
+    "node_count": 12,
+    "hold_count": 25,
+    "sampled_frames": 273,
+    "detection_rate": 1.0,
+    "direction_optical_repeat_mean_deg": 0.1805,
+    "direction_optical_repeat_max_deg": 0.694,
+    "encoder_command_abs_error_mean_deg": 0.7538,
+    "encoder_command_abs_error_max_deg": 1.7,
+    "independent_validation": "pending",
+    "restriction": "Endpoints interpolated from frozen training LUT; no refit on validation data."
+  },
+  "source": {
+    "calibration_report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\foam_angle_relation_20261006_existing_lut_diagnostic.json",
+    "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_angle_relation_20261006\\foam_angle_relation_20261006_20261006_180139_569426.mkv",
+    "events": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_angle_relation_20261006\\foam_angle_relation_20261006_20261006_180139_569426.angles.jsonl",
+    "rtt": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_angle_relation_20261006\\foam_angle_relation_20261006_20261006_180139_569426.rtt.jsonl",
+    "camera_calibration": "D:\\Study_data\\AerialRoboArm-Vision-Core\\configs\\camera_2p1mm_640x480_fisheye.json",
+    "model": "D:\\Study_data\\AerialRoboArm-Vision-Core\\models\\foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt",
+    "frozen_training_lut_sha256": "c3ad912c0400f275089586994ea67ed42f3ce8b20f68224f3934994edb105b06"
+  },
+  "warning": "Preview only. Strict -77..-27 endpoint evaluation failed P95 and range coverage; do not activate HC-13 automatic output. Camera and target mounting must match the 2026-10-06 training capture.",
+  "independent_validation": {
+    "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\independent_validation\\20261006_213740_787482\\evaluation.json",
+    "full_original_overall_pass": false,
+    "range_selected_after_review": true,
+    "used_for_fit": false,
+    "restricted_evaluation": {
+      "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\independent_validation\\20261006_213740_787482\\restricted_range_evaluation.json",
+      "post_hoc_range_selection": true,
+      "sampled_frames": 228,
+      "detected_frames": 228,
+      "frames_inside_restricted_range": 206,
+      "range_coverage": 0.903509,
+      "absolute_error_deg": {
+        "mean": 0.476,
+        "median": 0.243,
+        "rmse": 0.7949,
+        "p95": 2.1982,
+        "max": 2.4049
+      },
+      "acceptance": {
+        "criteria": {
+          "detection_rate_min": 0.95,
+          "mae_deg_max": 1.0,
+          "p95_deg_max": 2.0,
+          "max_deg_max": 3.0,
+          "direction_repeat_mean_deg_max": 1.0
+        },
+        "detection_rate_pass": true,
+        "mae_pass": true,
+        "p95_pass": false,
+        "max_pass": true,
+        "direction_repeat_pass": true,
+        "overall_pass": false
+      }
+    }
+  }
+}

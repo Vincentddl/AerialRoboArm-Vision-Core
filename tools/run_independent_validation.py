@@ -15,8 +15,8 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-ANGLES = list(range(-22, -78, -5)) + list(range(-72, -21, 5))
-DEFAULT_CANDIDATE = ROOT / "outputs/foam_center_servo_camera_lut_20261006_candidate.json"
+ANGLES = list(range(-29, -75, -5)) + list(range(-69, -28, 5))
+DEFAULT_CANDIDATE = ROOT / "configs/servo_to_optical_angle_foam_center_lut_20261006_restricted_v1.json"
 MODEL = ROOT / "models/foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt"
 
 
@@ -69,7 +69,7 @@ def check_devices() -> None:
         raise RuntimeError("HX8 supply telemetry is invalid or outside 9.0..12.6 V.")
     if not age or int(age[1]) >= 140 or "stall=0" not in snapshots["[SAFE]"]:
         raise RuntimeError("HX8 feedback is stale or stall protection is active.")
-    print("Ready. Preposition near -22 deg in small steps before pressing R.")
+    print("Ready. Preposition near -29 deg in small steps before pressing R.")
 
 
 def audit(video: Path, candidate: dict) -> dict:
@@ -80,8 +80,8 @@ def audit(video: Path, candidate: dict) -> dict:
     timestamps = read_jsonl(video.with_suffix(".timestamps.jsonl"))
     started = [e for e in events if e.get("event") == "hold_started"]
     completed = [e for e in events if e.get("event") == "hold_completed"]
-    if len(started) != 23 or len(completed) != 23:
-        raise RuntimeError("Expected exactly 23 completed holds. Save this take and repeat the sequence.")
+    if len(started) != len(ANGLES) or len(completed) != len(ANGLES):
+        raise RuntimeError(f"Expected exactly {len(ANGLES)} completed holds. Save this take and repeat the sequence.")
     if [e["angle_deg"] for e in started] != ANGLES:
         raise RuntimeError("Recorded guide angles differ from the independent validation sequence.")
     for index, (first, last) in enumerate(zip(started, completed), 1):
@@ -120,7 +120,7 @@ def audit(video: Path, candidate: dict) -> dict:
     training_video = Path(candidate.get("source", {}).get("video", ""))
     if training_video.is_file() and video_hash == sha256(training_video):
         raise RuntimeError("Validation video is identical to the training video.")
-    return {"holds": 23, "frames": frames, "video_sha256": video_hash, "material_pass": True}
+    return {"holds": len(ANGLES), "frames": frames, "video_sha256": video_hash, "material_pass": True}
 
 
 def main() -> int:

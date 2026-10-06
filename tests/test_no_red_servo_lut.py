@@ -11,6 +11,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from vision.servo_angle_calibration import ServoOpticalAngleCalibration
+from vision.hc13_link import select_control_target
 
 
 CONFIG = ROOT / "configs" / "servo_to_optical_angle_foam_center_lut_20260816_v1.json"
@@ -36,6 +37,23 @@ class NoRedServoLookupTest(unittest.TestCase):
         self.assertFalse(validation["used_for_fit"])
         self.assertTrue(validation["acceptance"]["overall_pass"])
         self.assertEqual(validation["sampled_frames"], 230)
+
+
+class RestrictedVisualRangeTest(unittest.TestCase):
+    def test_boundaries_reject_extrapolated_targets_without_tolerance(self):
+        cal = ServoOpticalAngleCalibration.from_json(
+            ROOT / "configs/servo_to_optical_angle_foam_center_lut_20261006_restricted_v1.json"
+        )
+        self.assertEqual(cal.servo_range_deg, (-77.0, -27.0))
+        for angle in (-77.0, -27.0):
+            self.assertTrue(cal.is_optical_offset_in_range(cal.optical_offset_from_servo(angle)))
+        for angle in (-77.01, -26.99):
+            optical = cal.optical_offset_from_servo(angle)
+            self.assertFalse(cal.is_optical_offset_in_range(optical))
+            target = {"target_valid": True, "angle_mode": "servo_calibrated",
+                      "servo_calibration_valid": cal.is_optical_offset_in_range(optical),
+                      "lateral_valid": True, "score": 0.95, "servo_command_deg": angle}
+            self.assertIsNone(select_control_target([target], 0.6))
 
 
 if __name__ == "__main__":

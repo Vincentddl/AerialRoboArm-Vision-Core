@@ -4,7 +4,7 @@
 
 ## 一键独立验证
 
-双击根目录 `start_independent_validation.bat`。程序检查相机、RTT 和 HX8 回读后，打开 `-22°→-77°→-22°` 的 23 档录制窗口。按 R 开始，G 发送当前引导角，停稳后空格记录 3 秒，空格进入下一档；完成后 S 保存、Q 退出。退出后自动核对素材并用冻结的命令角候选表做 CPU 评估，报告保存到 `outputs/independent_validation/`。模型 `.pt` 与候选 JSON 需要在本机存在。程序不会自动替换运行标定。
+双击根目录 `start_independent_validation.bat`。程序检查相机、RTT 和 HX8 回读后，打开 `-29°→-74°→-29°` 的 19 档录制窗口，检验 `-77°～-27°` 候选范围的内部插值。按 R 开始，G 发送当前引导角，停稳后空格记录 3 秒，空格进入下一档；完成后 S 保存、Q 退出。退出后自动核对素材并用冻结的命令角候选表做 CPU 评估，报告保存到 `outputs/independent_validation/`。模型 `.pt` 需要在本机存在。内部验证通过也不代表端点验证通过；程序不会自动替换运行标定。
 
 已保存的独立视频也可用 `python tools/run_independent_validation.py --video <视频.mkv>` 重新检查和评估；`--check-only` 仅检查设备，不录制。
 

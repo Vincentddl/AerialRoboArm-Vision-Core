@@ -45,6 +45,7 @@ USB Video（640×480）
 
 | 文件 | 状态 | 作用 |
 | --- | --- | --- |
+| `configs/servo_to_optical_angle_foam_center_lut_20261006_restricted_v1.json` | **新装夹预览候选** | 2026-10-06 训练表限制到 `-77°～-27°`，边界容差 0°；严格范围验证未通过，使用专用预览入口，不启用自动发送。 |
 | `configs/camera_2p1mm_640x480_fisheye.json` | **当前使用** | 2.1 mm 鱼眼镜头内参和畸变参数，把像素射线换算为视线角。仅适用于同一镜头、焦距和 640×480 分辨率。 |
 | `configs/servo_to_optical_angle_foam_center_lut_20260816_v1.json` | **当前使用** | 无红点泡沫中心到舵机角度的 11 节点实测关系，范围 `g=-97°～-47°`。 |
 | `configs/servo_to_optical_angle_red_marker_lut_20260815_v3.json` | **红点监视器/历史保留** | 夹爪红点视线标定，供 `run_servo_angle_monitor.py` 和历史验证使用；不是当前无红点入口默认表。 |
