@@ -103,6 +103,7 @@ legacy_mechanical_angle_deg = camera_plane_angle_deg + 30°
 ```
 
 该实测关系已经包含40:48外啮合齿轮的影响，运行时不要再次乘齿轮比。
+MCU 当前软件限位为 `-90°～+85°`；HC-13 自动发送只接受两者交集 `-90°～-47°`，不会把超出限位的视觉目标钳位后发送。
 
 `servo_to_optical_angle_red_marker_lut_20260815_v3.json` 仍用于专门的红点角度监视器和历史对照，不是当前无红点实时入口的默认表；更早的 V2/V1 表继续保留作回退。
 

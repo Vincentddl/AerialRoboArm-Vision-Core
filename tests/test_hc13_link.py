@@ -61,6 +61,16 @@ class HC13ProtocolTests(unittest.TestCase):
         self.assertIs(select_control_target([low, high], 0.6), high)
         self.assertIsNone(select_control_target([low], 0.6))
 
+    def test_rejects_angles_outside_the_mcu_mechanical_limit(self):
+        self.assertIsNone(select_control_target([target(angle=-91)], 0.6))
+        self.assertIsNotNone(select_control_target([target(angle=-90)], 0.6))
+        self.assertIsNotNone(select_control_target([target(angle=85)], 0.6))
+        self.assertIsNone(select_control_target([target(angle=86)], 0.6))
+        with self.assertRaises(ValueError):
+            HC13SerialLink.encode_target(-91, 0, 90)
+        with self.assertRaises(ValueError):
+            HC13SerialLink.encode_target(86, 0, 90)
+
 
 if __name__ == "__main__":
     unittest.main()

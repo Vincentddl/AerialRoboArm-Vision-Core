@@ -19,6 +19,10 @@ import time
 from typing import Iterable, Optional
 
 
+MCU_SERVO_MIN_DEG = -90
+MCU_SERVO_MAX_DEG = 85
+
+
 @dataclass(frozen=True)
 class HC13GateResult:
     """Observable result of one target-gate update."""
@@ -44,6 +48,7 @@ def select_control_target(targets: Iterable[dict], min_confidence: float) -> Opt
         and target.get("missed_frames", 0) == 0
         and float(target.get("score", 0.0)) >= min_confidence
         and "servo_command_deg" in target
+        and MCU_SERVO_MIN_DEG <= float(target["servo_command_deg"]) <= MCU_SERVO_MAX_DEG
     ]
     if not valid:
         return None
@@ -166,7 +171,11 @@ class HC13SerialLink:
 
     @staticmethod
     def encode_target(angle_deg: int, speed: int, confidence_percent: int) -> bytes:
-        angle = max(-180, min(180, int(angle_deg)))
+        angle = int(angle_deg)
+        if not MCU_SERVO_MIN_DEG <= angle <= MCU_SERVO_MAX_DEG:
+            raise ValueError(
+                f"servo angle must stay within {MCU_SERVO_MIN_DEG}..{MCU_SERVO_MAX_DEG} deg"
+            )
         speed_value = max(0, min(65535, int(speed)))
         confidence = max(0, min(100, int(confidence_percent)))
         return f"V,{angle},{speed_value},{confidence}\r\n".encode("ascii")

@@ -32,7 +32,8 @@ CAMERA_CALIBRATION = PROJECT_ROOT / "configs" / "camera_2p1mm_640x480_fisheye.js
 # Marker-free V1 definition: YOLO finds the visible foam geometric centre,
 # fisheye calibration converts that pixel to an optical-axis offset, and this
 # empirical table returns the corresponding nominal g command. The table is
-# valid for g=-97..-47 degrees and already includes the 40:48 transmission.
+# measured for g=-97..-47 degrees and already includes the 40:48 transmission.
+# The HC-13 sender separately enforces the MCU's -90..+85 degree limit.
 SERVO_CALIBRATION = (
     PROJECT_ROOT / "configs" / "servo_to_optical_angle_foam_center_lut_20260816_v1.json"
 )
