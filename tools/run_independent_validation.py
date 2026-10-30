@@ -59,6 +59,8 @@ def check_devices() -> None:
     snapshots = {}
     for tag in ("[DBG]", "[SAFE]", "[PWR]"):
         matches = [line for line in lines if tag in line]
+        if not matches and tag in ('[SAFE]', '[PWR]'):
+            matches = [line for line in lines if '[DBG]' in line and 'voltage=' in line and 'fb_age=' in line]
         if not matches:
             raise RuntimeError(f"No {tag} telemetry from RTT. Check the MCU and OpenOCD connection.")
         snapshots[tag] = matches[-1]

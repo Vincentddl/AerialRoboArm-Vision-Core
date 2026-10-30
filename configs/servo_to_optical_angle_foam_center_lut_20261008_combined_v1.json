@@ -1,0 +1,194 @@
+{
+  "type": "servo_optical_angle_lut",
+  "name": "foam_center_servo_camera_lut_20261008_combined_v1",
+  "version": 1,
+  "created_at": "2026-10-08T16:14:47+08:00",
+  "status": "combined_training_complete_independent_test_pending",
+  "definitions": {
+    "servo_command_deg": "Nominal g command from pooled recordings, not measured encoder position.",
+    "optical_offset_deg": "Fisheye-corrected ray angle of the current runtime visible foam centre."
+  },
+  "runtime_anchor": {
+    "detector": "foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt",
+    "detector_sha256": "04595f4f5d92afc5ec219d1a7a3e20d2b1a8a6ad7d01230813a954d019b7a8c3",
+    "point": "current runtime hybrid",
+    "inference_device": "cpu",
+    "imgsz": 640,
+    "confidence_min": 0.5,
+    "reject_clipped_target_boxes": true
+  },
+  "model": {
+    "kind": "piecewise_linear_lut",
+    "interpolation": "linear",
+    "inverse_interpolation": "linear",
+    "points": [
+      {
+        "servo_command_deg": -77.0,
+        "optical_offset_deg": -18.126232
+      },
+      {
+        "servo_command_deg": -72.0,
+        "optical_offset_deg": -16.449352
+      },
+      {
+        "servo_command_deg": -67.0,
+        "optical_offset_deg": -14.013692
+      },
+      {
+        "servo_command_deg": -62.0,
+        "optical_offset_deg": -10.783487
+      },
+      {
+        "servo_command_deg": -57.0,
+        "optical_offset_deg": -7.20227
+      },
+      {
+        "servo_command_deg": -52.0,
+        "optical_offset_deg": -3.499653
+      },
+      {
+        "servo_command_deg": -47.0,
+        "optical_offset_deg": 0.241054
+      },
+      {
+        "servo_command_deg": -42.0,
+        "optical_offset_deg": 4.039941
+      },
+      {
+        "servo_command_deg": -37.0,
+        "optical_offset_deg": 7.810796
+      },
+      {
+        "servo_command_deg": -32.0,
+        "optical_offset_deg": 11.616816
+      }
+    ]
+  },
+  "valid_range": {
+    "servo_command_deg": [
+      -77.0,
+      -32.0
+    ],
+    "optical_offset_deg": [
+      -18.12623195497648,
+      11.616815810073362
+    ]
+  },
+  "boundary_tolerance_deg": 0.0,
+  "fit": {
+    "method": "pooled_encoder_geometry_with_current_tracking",
+    "training_diagnostics": {
+      "holds": 34,
+      "frames": 476,
+      "range_coverage": 0.9769,
+      "encoder_error": {
+        "mae_deg": 0.5643,
+        "p95_deg": 2.1761,
+        "max_deg": 2.3968,
+        "bias_deg": -0.1323
+      },
+      "command_error": {
+        "mae_deg": 0.6579,
+        "p95_deg": 1.8594,
+        "max_deg": 2.1544,
+        "bias_deg": 0.2751
+      },
+      "extrapolated_frames_included_for_diagnostics": 11
+    },
+    "current_controller_holds": 34,
+    "acceptance_target_deg": 3.0,
+    "current_command_leave_one_recording_out": [
+      {
+        "held_current_session": 0,
+        "fit_command_support": [
+          -70.0,
+          -35.0
+        ],
+        "uses_endpoint_extrapolation_for_diagnostics": true,
+        "holds": 18,
+        "frames": 252,
+        "range_coverage": 0.9603,
+        "encoder_error": {
+          "mae_deg": 0.5431,
+          "p95_deg": 1.2252,
+          "max_deg": 1.7365,
+          "bias_deg": -0.0398
+        },
+        "command_error": {
+          "mae_deg": 0.6785,
+          "p95_deg": 2.4532,
+          "max_deg": 2.6566,
+          "bias_deg": 0.4852
+        },
+        "extrapolated_frames_included_for_diagnostics": 10
+      },
+      {
+        "held_current_session": 1,
+        "fit_command_support": [
+          -77.0,
+          -32.0
+        ],
+        "uses_endpoint_extrapolation_for_diagnostics": true,
+        "holds": 16,
+        "frames": 224,
+        "range_coverage": 1.0,
+        "encoder_error": {
+          "mae_deg": 0.7008,
+          "p95_deg": 2.6655,
+          "max_deg": 3.0378,
+          "bias_deg": 0.009
+        },
+        "command_error": {
+          "mae_deg": 0.857,
+          "p95_deg": 2.4655,
+          "max_deg": 2.8378,
+          "bias_deg": 0.284
+        },
+        "extrapolated_frames_included_for_diagnostics": 0
+      }
+    ]
+  },
+  "source": {
+    "training_recordings": [
+      {
+        "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\foam_angle_relation_20261006_existing_lut_diagnostic.json",
+        "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\foam_angle_relation_20261006\\foam_angle_relation_20261006_20261006_180139_569426.mkv",
+        "video_sha256": "bbf8118761a1d9c9be98929ace8167c02c06851652d2a234cfc6d59389b33ebf",
+        "report_sha256": "0576f78756e0899e22c76764896094cd4687f2fcb9d133e3ca2c07a8a387ebd8"
+      },
+      {
+        "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\independent_validation\\20261006_213740_787482\\evaluation.json",
+        "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\independent_validation\\20261006_213740_787482\\foam_angle_independent_20261006_213935_289144.mkv",
+        "video_sha256": "c0d8b308ec5b585941d493b5255ec91cfdcd8d580a24f7f62b2ef3c64fcafa19",
+        "report_sha256": "cbddc8eefcc01efb29bd0ecc5c22219650e9b2435f547ee1790abdb6eaabeef4"
+      },
+      {
+        "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\independent_validation\\20261006_215850_059199\\evaluation.json",
+        "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\independent_validation\\20261006_215850_059199\\foam_angle_independent_20261006_215933_798946.mkv",
+        "video_sha256": "681855f6beb4524dc1471fa42c599595db85bd8fb86fde59d3e693489f825789",
+        "report_sha256": "ea12113ac117053aaaac14cd8a63ffe2dbd242a857bcfd69a8da93ec038226cc"
+      },
+      {
+        "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\precision_relation_20261007\\material_detection_diagnostic.json",
+        "report_sha256": "6d4cd613920292566d323a0aaa665c8a7c1807dfea0d67f780eff6b9d976bd96",
+        "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\precision_relation_calibration_20261007\\precision_foam_relation_20261007_230314_573998.mkv",
+        "video_sha256": "bc25e9a7fbde76bfada48873635d4280a628fe9c8605fb86609a04ba61f86791"
+      },
+      {
+        "report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\hx8_m20_to_m85_20261008\\detection_diagnostic.json",
+        "report_sha256": "0e4603ea42c76e21178e15f64c9f931789be3d4cae899774149acc401aef9bf4",
+        "video": "D:\\Study_data\\AerialRoboArm-Vision-Core\\data\\raw\\hx8_m20_to_m85_20261008\\hx8_m20_to_m85_20261008_20261008_160120_039160.mkv",
+        "video_sha256": "1753860c677dc7657cd0d6dbf492aa68c301305c56f05996ab82b646fd045d61"
+      }
+    ],
+    "fit_report": "D:\\Study_data\\AerialRoboArm-Vision-Core\\outputs\\combined_relation_20261008\\fit_report.json",
+    "camera_calibration": "configs/camera_2p1mm_640x480_fisheye.json"
+  },
+  "independent_validation": null,
+  "warning": "Training and recording holdout diagnostics are not an independent test. Preview candidate; no automatic actuation enabled.",
+  "controller_context": {
+    "firmware": "ccc0389",
+    "position_trim_enabled": true,
+    "old_controller_commands_used": false
+  }
+}

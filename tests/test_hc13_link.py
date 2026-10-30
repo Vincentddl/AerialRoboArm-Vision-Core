@@ -17,6 +17,30 @@ def target(track_id=1, angle=-70.0, score=0.9, valid=True):
 
 
 class StableTargetGateTests(unittest.TestCase):
+    def test_grip_gate_is_independent_of_immediate_arm_gate(self):
+        arm = StableTargetGate(confirmation_frames=1)
+        grip = StableTargetGate(confirmation_frames=3, max_spread_deg=2)
+        for i, angle in enumerate([-60., -59.5, -60.5]):
+            self.assertTrue(arm.update(target(angle=angle), i * .1).should_send)
+            g = grip.update(target(angle=angle), i * .1)
+            self.assertEqual(g.status == "LOCKED", i == 2)
+        self.assertEqual(HC13SerialLink.encode_target(-60, 0, 90, 3), b"V,-60,0,90,3\r\n")
+        self.assertEqual(grip.update(None, .4).confirmed_frames, 0)
+        self.assertFalse(grip.update(target(track_id=2), .5).should_send)
+        with self.assertRaises(ValueError):
+            HC13SerialLink.encode_target(-60, 0, 90, 4)
+
+    def test_default_sends_first_valid_frame_and_recovers_without_wait(self):
+        gate = StableTargetGate()
+        first = gate.update(target(angle=-60.4), 0.0)
+        self.assertTrue(first.should_send)
+        self.assertEqual(first.angle_deg, -60)
+        self.assertEqual(first.required_frames, 1)
+        self.assertFalse(gate.update(target(angle=-55), 0.01).should_send)
+        self.assertTrue(gate.update(target(angle=-55), 0.06).should_send)
+        gate.update(None, 0.07)
+        self.assertTrue(gate.update(target(angle=-50), 0.08).should_send)
+
     def test_requires_consecutive_stable_frames(self):
         gate = StableTargetGate(confirmation_frames=3, max_spread_deg=1.0, send_hz=20)
         self.assertFalse(gate.update(target(angle=-70.2), 0.00).should_send)

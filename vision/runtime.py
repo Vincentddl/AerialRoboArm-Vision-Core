@@ -614,7 +614,7 @@ def main():
     parser.add_argument(
         "--hc13-confirm-frames",
         type=int,
-        default=5,
+        default=1,
         help="Consecutive valid frames required before a servo command is sent.",
     )
     parser.add_argument(
@@ -745,7 +745,13 @@ def main():
         send_hz=args.hc13_send_hz,
     )
     hc13_link = None
+    # Independent from the single-frame arm gate: only the gripper waits for
+    # three same-track, low-spread camera observations.
+    grip_gate = StableTargetGate(confirmation_frames=3, max_spread_deg=2.0,
+                                 send_hz=args.hc13_send_hz)
     hc13_armed = bool(args.hc13_arm_on_start)
+    grip_result = HC13GateResult(status="DISARMED", required_frames=3)
+    last_grip_stable_sent = None
     hc13_error = ""
     hc13_result = HC13GateResult(
         status="DISABLED",
@@ -857,28 +863,40 @@ def main():
             infer_ms = (time.perf_counter() - start) * 1000.0
 
             # Control output is intentionally separate from detection output.
-            # Only a calibrated, in-plane target that remains stable for the
-            # configured number of frames is allowed to reach the MCU.
+            # Arm tracking sends the first valid target. An independent
+            # three-frame stability value controls only the gripper.
             if hc13_link is not None and hc13_armed:
                 control_target = select_control_target(
                     arm_targets,
                     min_confidence=args.hc13_min_confidence,
                 )
                 hc13_result = hc13_gate.update(control_target, time.perf_counter())
-                if hc13_result.should_send:
+                grip_result = grip_gate.update(control_target, time.perf_counter())
+                stable_frames = (grip_result.confirmed_frames
+                                 if grip_result.status in ("LOCKED", "CONFIRMING") else 0)
+                # Deliver changes 1 -> 2 -> 3 without waiting for the normal
+                # 20 Hz heartbeat, so grip confirmation is not stretched by it.
+                grip_changed = stable_frames != last_grip_stable_sent
+                if control_target is not None and (hc13_result.should_send or grip_changed):
                     try:
                         hc13_link.send_target(
                             hc13_result.angle_deg,
                             args.hc13_target_speed,
                             hc13_result.confidence_percent,
+                            stable_frames=stable_frames,
                         )
+                        last_grip_stable_sent = stable_frames
                     except Exception as exc:
                         hc13_error = str(exc)
                         hc13_armed = False
                         hc13_gate.reset()
+                        grip_gate.reset()
                         print(f"HC-13 send failed; output disarmed: {hc13_error}")
             elif hc13_link is not None:
                 hc13_gate.reset()
+                grip_gate.reset()
+                grip_result = HC13GateResult(status="DISARMED", required_frames=3)
+                last_grip_stable_sent = None
                 hc13_result = HC13GateResult(
                     status="DISARMED - PRESS A",
                     required_frames=args.hc13_confirm_frames,
@@ -948,6 +966,9 @@ def main():
                     f"HC13 {'ARMED' if hc13_armed else 'SAFE'} "
                     f"{hc13_result.status}{count_text}{angle_text}"
                 )
+                grip_count = (grip_result.confirmed_frames
+                              if grip_result.status in ("LOCKED", "CONFIRMING") else 0)
+                hc13_text += f" grip_stable={grip_count}/3"
                 hc13_color = (0, 255, 0) if hc13_armed else (0, 255, 255)
             cv2.putText(
                 vis,
@@ -992,6 +1013,8 @@ def main():
                     else:
                         hc13_armed = not hc13_armed
                         hc13_gate.reset()
+                        grip_gate.reset()
+                        last_grip_stable_sent = None
                         if hc13_armed:
                             hc13_error = ""
                         print(

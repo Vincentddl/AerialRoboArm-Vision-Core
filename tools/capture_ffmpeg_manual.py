@@ -16,7 +16,7 @@ import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = SCRIPT_DIR.parent
-RTT_VALUE_PATTERN = re.compile(r"\b([A-Za-z][A-Za-z0-9_]*)=(-?\d+(?:\.\d+)?)")
+RTT_VALUE_PATTERN = re.compile(r"\b([A-Za-z][A-Za-z0-9_]*)=(0x[0-9a-fA-F]+|-?\d+(?:\.\d+)?)")
 
 
 # Preview-only collection script for improving detector generalization.  The
@@ -273,6 +273,8 @@ class RttTelemetryLogger:
 
     @staticmethod
     def _parse_value(value):
+        if value.startswith('0x'):
+            return int(value, 16)
         return float(value) if "." in value else int(value)
 
     def _write_line(self, raw_line):

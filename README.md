@@ -29,6 +29,10 @@ V9首先分割泡沫目标轮廓，再计算中心：
 
 ## 启动
 
+图传延迟独立测试：双击 `start_video_latency_test.bat`，让相机拍摄电脑SOURCE时间码窗口，按空格开始。它不发送执行器命令，测量包含源屏幕的回传闭环时间，详见 [测试说明](docs/video_latency_test.md)。
+
+大数字计时器测试：双击 `start_video_timer_test.bat`，相机只拍完整大数字与黑色边框，按空格记录45秒。采集期间不识别数字，结束后保存原始帧并离线读数，详见 [数字计时器测试说明](docs/video_timer_latency_test.md)。
+
 ```powershell
 python -m pip install -r requirements.txt
 python run_realtime.py

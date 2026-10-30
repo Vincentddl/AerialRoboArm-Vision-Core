@@ -10,6 +10,7 @@ from collections import Counter
 from datetime import datetime
 import hashlib
 import json
+import re
 from pathlib import Path
 import sys
 
@@ -93,7 +94,7 @@ def metrics(rows, mode, optical, knots):
             'extrapolated_frames_included_for_diagnostics': total - inside}
 
 
-def collect(reports, minimum, maximum, output):
+def collect(reports, minimum, maximum, output, trim_start=.8, trim_end=.2):
     model_path = ROOT / 'models/foam_center_v9_gripper_axis_normal_bg03_20260816_candidate.pt'
     model = YOLO(str(model_path))
     mapper = PixelToWorldMapper(ROOT / 'configs/camera_2p1mm_640x480_fisheye.json')
@@ -106,33 +107,36 @@ def collect(reports, minimum, maximum, output):
         capture = cv2.VideoCapture(report['video'])
         fps = capture.get(cv2.CAP_PROP_FPS)
         selected, states = [], {}
-        for hold in report['holds']:
+        for occurrence, hold in enumerate(report['holds'], 1):
             step = hold['step']; command = hold['guide_angle_deg']
             if not minimum <= command <= maximum:
                 excluded.append({'session': sid, 'step': step, 'reason': 'outside requested range'})
                 continue
-            snapshots = [r for r in telemetry if hold['start_elapsed'] <= r['elapsed_seconds'] <= hold['end_elapsed']]
+            snapshots = [r for r in telemetry if hold['start_elapsed'] + trim_start <= r['elapsed_seconds'] <= hold['end_elapsed'] - trim_end]
             positions = [r['pos'] for r in snapshots if 'pos' in r]
             volts = [r['voltage'] for r in snapshots if 'voltage' in r]
-            targets = [r['tgt'] for r in snapshots if 'tgt' in r]
+            targets = [r['tgt'] for r in snapshots if 'tgt' in r and 'pos' in r]
+            faults = [int(m.group(1), 16) & 0xFE for r in snapshots
+                      if (m := re.search(r'status=0x([0-9a-fA-F]+)', r.get('raw', '')))]
             if (len(positions) < 2 or max(positions) - min(positions) > .25 or not volts
                     or min(volts) < 9000 or max(volts) > 12600 or not targets
-                    or abs(np.median(targets) - command) > .1
+                    or any(abs(target - command) > .1 for target in targets)
+                    or any(faults)
                     or any(r.get('rd', 0) or r.get('stall', 0) for r in snapshots)):
                 excluded.append({'session': sid, 'step': step, 'reason': 'invalid or unstable telemetry'})
                 continue
-            states[step] = {'session': sid, 'step': step, 'command_deg': command,
+            states[occurrence] = {'session': sid, 'step': step, 'occurrence': occurrence, 'command_deg': command,
                             'encoder_deg': float(np.median(positions)), 'sampled': 0,
                             'low_confidence': 0, 'clipped': 0, 'center_sources': [],
                             'center_delta_px': [], 'optical': {'runtime_hybrid': [], 'box_center': []}}
-            first = hold['start_frame'] + round(.8 * fps)
-            last = hold['end_frame'] - round(.2 * fps)
+            first = hold['start_frame'] + round(trim_start * fps)
+            last = hold['end_frame'] - round(trim_end * fps)
             for frame_index in range(first, max(first, last) + 1, max(1, round(fps / 5))):
                 capture.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
                 ok, frame = capture.read()
                 if not ok: raise RuntimeError(f'Unreadable frame {sid}:{frame_index}')
-                selected.append((step, frame))
-                states[step]['sampled'] += 1
+                selected.append((occurrence, frame))
+                states[occurrence]['sampled'] += 1
         capture.release()
         for start in range(0, len(selected), 16):
             batch = selected[start:start + 16]

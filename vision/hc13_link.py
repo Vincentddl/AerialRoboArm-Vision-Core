@@ -5,8 +5,8 @@ The MCU accepts one ASCII line per vision command::
     V,<servo_g_angle_deg>,<speed>,<confidence>\r\n
 
 ``servo_g_angle_deg`` is the calibrated HX8 ``g`` command, not the raw camera
-optical-axis offset.  The link deliberately requires a run of stable frames
-before transmitting.  If the target disappears or becomes invalid, it stops
+optical-axis offset. The default sends the first valid frame immediately;
+multi-frame stability confirmation remains configurable. If a target becomes invalid, it stops
 transmitting; the MCU's vision timeout then keeps the last safe position.
 """
 
@@ -60,7 +60,7 @@ class StableTargetGate:
 
     def __init__(
         self,
-        confirmation_frames: int = 5,
+        confirmation_frames: int = 1,
         max_spread_deg: float = 2.0,
         send_hz: float = 20.0,
     ) -> None:
@@ -170,7 +170,8 @@ class HC13SerialLink:
         self._serial.reset_input_buffer()
 
     @staticmethod
-    def encode_target(angle_deg: int, speed: int, confidence_percent: int) -> bytes:
+    def encode_target(angle_deg: int, speed: int, confidence_percent: int,
+                      stable_frames: Optional[int] = None) -> bytes:
         angle = int(angle_deg)
         if not MCU_SERVO_MIN_DEG <= angle <= MCU_SERVO_MAX_DEG:
             raise ValueError(
@@ -178,15 +179,21 @@ class HC13SerialLink:
             )
         speed_value = max(0, min(65535, int(speed)))
         confidence = max(0, min(100, int(confidence_percent)))
-        return f"V,{angle},{speed_value},{confidence}\r\n".encode("ascii")
+        suffix = ""
+        if stable_frames is not None:
+            if not 0 <= int(stable_frames) <= 3:
+                raise ValueError("stable_frames must be in 0..3")
+            suffix = f",{int(stable_frames)}"
+        return f"V,{angle},{speed_value},{confidence}{suffix}\r\n".encode("ascii")
 
-    def send_target(self, angle_deg: int, speed: int, confidence_percent: int) -> bytes:
+    def send_target(self, angle_deg: int, speed: int, confidence_percent: int,
+                    stable_frames: Optional[int] = None) -> bytes:
         # Drain optional legacy bring-up echoes so they cannot accumulate in
         # the Windows receive buffer during a long real-time run.
         waiting = int(getattr(self._serial, "in_waiting", 0))
         if waiting > 0:
             self._serial.read(waiting)
-        packet = self.encode_target(angle_deg, speed, confidence_percent)
+        packet = self.encode_target(angle_deg, speed, confidence_percent, stable_frames)
         self._serial.write(packet)
         return packet
 
